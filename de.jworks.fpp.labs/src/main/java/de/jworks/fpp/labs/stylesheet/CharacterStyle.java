@@ -12,10 +12,10 @@ public class CharacterStyle {
 	@XmlAttribute
 	private String name;
 	
-	@XmlAttribute
+	@XmlAttribute(name = "font-name")
 	private String fontName;
 	
-	@XmlAttribute
+	@XmlAttribute(name = "font-size")
 	private float fontSize;
 	
 	@XmlAttribute(name = "color")

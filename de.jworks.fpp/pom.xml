@@ -1,4 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project 
+	xmlns="http://maven.apache.org/POM/4.0.0" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="
 		http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
@@ -10,8 +12,8 @@
 
 	<packaging>pom</packaging>
 
-	<name>FPP</name>
-	<description>Fast Publishing Platform</description>
+	<name>Fast Publishing Platform</name>
+	<url>https://github.com/toeich/fps/de.jworks.fpp</url>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -20,6 +22,26 @@
 	<modules>
 		<module>../de.jworks.fpp.labs</module>
 	</modules>
+
+	<dependencyManagement>
+
+		<dependencies>
+
+			<dependency>
+				<groupId>org.apache.pdfbox</groupId>
+				<artifactId>pdfbox</artifactId>
+				<version>1.8.3</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.ibm.icu</groupId>
+				<artifactId>icu4j</artifactId>
+				<version>52.1</version>
+			</dependency>
+
+		</dependencies>
+
+	</dependencyManagement>
 
 	<build>
 
@@ -38,5 +60,5 @@
 		</plugins>
 
 	</build>
-	
+
 </project>

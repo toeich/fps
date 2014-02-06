@@ -1,0 +1,13 @@
+<stylesheet>
+
+	<colors>
+	</colors>
+	
+	<character-styles>
+		<character-style name="Default" font-name="Helvetica" font-size="12.0" />
+	</character-styles>
+	
+	<paragraph-styles>
+	</paragraph-styles>
+	
+</stylesheet>
