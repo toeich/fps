@@ -21,4 +21,13 @@ public class Story {
 	public Story(Story prototype) {
 	}
 	
+	@Override
+	public String toString() {
+		StringBuffer buffer = new StringBuffer();
+		for (Paragraph paragraph : paragraphs) {
+			buffer.append(paragraph);
+		}
+		return buffer.toString();
+	}
+	
 }

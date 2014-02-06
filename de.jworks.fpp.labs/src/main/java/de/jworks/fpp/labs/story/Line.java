@@ -17,8 +17,17 @@ public class Line {
 
 	public Line() {
 	}
-	
+
 	public Line(Line prototype) {
 	}
-	
+
+	@Override
+	public String toString() {
+		StringBuffer buffer = new StringBuffer();
+		for (Run run : runs) {
+			buffer.append(run);
+		}
+		return buffer.toString();
+	}
+
 }

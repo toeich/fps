@@ -1,14 +1,18 @@
 package de.jworks.fpp.labs.layout;
 
-import static org.junit.Assert.fail;
+import static org.junit.Assert.assertEquals;
 
 import javax.xml.bind.JAXB;
 
+import org.apache.commons.io.IOUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import de.jworks.fpp.labs.story.Line;
+import de.jworks.fpp.labs.story.Paragraph;
 import de.jworks.fpp.labs.story.Run;
+import de.jworks.fpp.labs.story.Story;
 import de.jworks.fpp.labs.stylesheet.Stylesheet;
 
 public class LayoutContextTest {
@@ -27,30 +31,47 @@ public class LayoutContextTest {
 	}
 	
 	@Test
-	public void testLayoutStory() {
-		fail("Not yet implemented");
+	public void testLayoutStory() throws Exception {
+		Story story = unmarshal("/story.xml", Story.class);
+		Story[] layoutResult = cut.layout(story, 0L, 0L, 200000L, 10000L);
+		String expected = laadString("/story.txt");
+		String actual = layoutResult[0].toString();
+		assertEquals(expected, actual);
 	}
 
 	@Test
-	public void testLayoutParagraph() {
-		fail("Not yet implemented");
+	public void testLayoutParagraph() throws Exception {
+		Paragraph paragraph = unmarshal("/paragraph.xml", Paragraph.class);
+		Paragraph[] layoutResult = cut.layout(paragraph, 0L, 0L, 200000L, 10000L);
+		String expected = laadString("/paragraph.txt");
+		String actual = layoutResult[0].toString();
+		assertEquals(expected, actual);
 	}
 
 	@Test
-	public void testLayoutLine() {
-		fail("Not yet implemented");
+	public void testLayoutLine() throws Exception {
+		Line line = unmarshal("/line.xml", Line.class);
+		Line[] layoutResult = cut.layout(line, 0L, 0L, 200000L, 10000L);
+		String expected = laadString("/line.txt");
+		String actual = layoutResult[0].toString();
+		assertEquals(expected, actual);
 	}
 
 	@Test
-	public void testLayoutRun() {
+	public void testLayoutRun() throws Exception {
 		Run run = unmarshal("/run.xml", Run.class);
 		Run[] layoutResult = cut.layout(run, 0L, 0L, 200000L, 10000L);
-		System.out.println(layoutResult[0]);
-		fail("Not yet implemented");
+		String expected = laadString("/run.txt");
+		String actual = layoutResult[0].toString();
+		assertEquals(expected, actual);
 	}
 
-	private <T> T unmarshal(String name, Class<T> type) {
-		return JAXB.unmarshal(LayoutContextTest.class.getResourceAsStream(name), type);
+	private <T> T unmarshal(String resourceName, Class<T> type) {
+		return JAXB.unmarshal(LayoutContextTest.class.getResourceAsStream(resourceName), type);
+	}
+	
+	private String laadString(String resourceName) throws Exception {
+		return IOUtils.toString(LayoutContextTest.class.getResourceAsStream(resourceName));
 	}
 	
 }

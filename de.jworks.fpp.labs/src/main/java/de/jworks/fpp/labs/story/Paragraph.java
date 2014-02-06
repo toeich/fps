@@ -26,4 +26,13 @@ public class Paragraph {
 		this.paragraphStyleName = prototype.paragraphStyleName;
 	}
 	
+	@Override
+	public String toString() {
+		StringBuffer buffer = new StringBuffer();
+		for (Line line : lines) {
+			buffer.append(line).append("\n");
+		}
+		return buffer.toString();
+	}
+	
 }

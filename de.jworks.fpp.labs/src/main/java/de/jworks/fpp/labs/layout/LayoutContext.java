@@ -1,9 +1,13 @@
 package de.jworks.fpp.labs.layout;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import org.apache.commons.lang.ArrayUtils;
+import org.apache.fop.hyphenation.Hyphenation;
+import org.apache.fop.hyphenation.Hyphenator;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDTrueTypeFont;
@@ -78,14 +82,14 @@ public class LayoutContext {
 			if (rest != null) {
 				rest.lines.add(line);
 			} else {
-				Line[] layoutResult = layout(line, left, _top, right, bottom);
-				newParagraph.lines.add(layoutResult[0]);
-				if (_top != null) {
-					// TODO update _top
-				}
-				if (layoutResult[1] != null) {
-					rest = new Paragraph(paragraph);
-					rest.lines.add(layoutResult[1]);
+				Line _line = line;
+				while (_line != null) {
+					Line[] layoutResult = layout(_line, left, _top, right, bottom);
+					newParagraph.lines.add(layoutResult[0]);
+					if (_top != null) {
+						// TODO update _top
+					}
+					_line = layoutResult[1];
 				}
 			}
 		}
@@ -102,9 +106,17 @@ public class LayoutContext {
 				rest.runs.add(run);
 			} else {
 				Run[] layoutResult = layout(run, _left, top, right, bottom);
-				newLine.runs.add(layoutResult[0]);
-				if (_left != null) {
-					// TODO update _left
+				if (layoutResult[0] != null) {
+					newLine.runs.add(layoutResult[0]);
+					if (_left != null) {
+						CharacterStyle characterStyle = stylesheet.getCharacterStyle(run.characterStyleName);
+						PDFont font = getFont(characterStyle.getFontName());
+						try {
+							_left += (long) (font.getStringWidth(layoutResult[0].content) * characterStyle.getFontSize());
+						} catch (IOException e) {
+							throw new RuntimeException(e);
+						}
+					}
 				}
 				if (layoutResult[1] != null) {
 					rest = new Line(line);
@@ -127,7 +139,21 @@ public class LayoutContext {
 				if (stringWidth > width) {
 					int wordStart = lineBreakIterator.previous();
 					int wordEnd = lineBreakIterator.next();
-					// TODO hyphnate word
+					String word = run.content.substring(wordStart, wordEnd);
+					Hyphenation hyphenation = Hyphenator.hyphenate(run.language, null, null, null, word, 2, 2);
+					if (hyphenation != null) {
+						int[] hyphenationPoints = hyphenation.getHyphenationPoints();
+						ArrayUtils.reverse(hyphenationPoints);
+						for (int hyphenationPoint : hyphenationPoints) {
+							stringWidth = font.getStringWidth(run.content.substring(0, wordStart + hyphenationPoint) + "-") * characterStyle.getFontSize();
+							if (stringWidth <= width) {
+								return new Run[] { 
+										new Run(run, run.content.substring(0, wordStart + hyphenationPoint) + "-"),
+										new Run(run, run.content.substring(wordStart + hyphenationPoint))
+								};
+							}
+						}
+					}
 					return new Run[] {
 							new Run(run, run.content.substring(0, wordStart)), 
 							new Run(run, run.content.substring(wordStart)) };
@@ -148,12 +174,14 @@ public class LayoutContext {
 	}
 	
 	private PDFont createFont(String fontName) {
+		PDFont font = null;
 		try {
-			return PDTrueTypeFont.loadTTF(document, fontName);
+			font = PDTrueTypeFont.loadTTF(document, fontName);
 		} catch (Exception e) {
 			// TODO log info
+			font = PDType1Font.getStandardFont(fontName);
 		}
-		return PDType1Font.getStandardFont(fontName);
+		return font;
 	}
 	
 	private BreakIterator getLineBreakIterator(String text, String language) {
