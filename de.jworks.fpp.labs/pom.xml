@@ -18,17 +18,15 @@
 	<name>Fast Publishing System :: Labs</name>
 	
 	<dependencies>
-	
+
 		<dependency>
 			<groupId>commons-lang</groupId>
 			<artifactId>commons-lang</artifactId>
 		</dependency>
-		
 		<dependency>
 			<groupId>commons-logging</groupId>
 			<artifactId>commons-logging</artifactId>
 		</dependency>
-		
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
@@ -38,16 +36,19 @@
 			<groupId>org.apache.pdfbox</groupId>
 			<artifactId>pdfbox</artifactId>
 		</dependency>
-		
 		<dependency>
 			<groupId>com.ibm.icu</groupId>
 			<artifactId>icu4j</artifactId>
 		</dependency>
-		
 		<dependency>
 			<groupId>net.sf.offo</groupId>
 			<artifactId>fop-hyph</artifactId>
 			<version>2.0</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.freemarker</groupId>
+			<artifactId>freemarker</artifactId>
 		</dependency>
 		
 		<dependency>
@@ -59,7 +60,7 @@
 			<groupId>jcifs</groupId>
 			<artifactId>jcifs</artifactId>
 		</dependency>
-	
+		
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
