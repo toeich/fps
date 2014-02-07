@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
+   <extension
+         id="product"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="de.jworks.fpp.print.ui.application"
+            name="FPP :: Print">
+         <property
+               name="appName"
+               value="FPP :: Print">
+         </property>
+      </product>
+   </extension>
 
    <extension
          id="application"
@@ -12,46 +24,78 @@
       </application>
    </extension>
    <extension
-         point="org.eclipse.ui.perspectives">
-      <perspective
-            name="Perspective"
-            class="de.jworks.fpp.print.ui.Perspective"
-            id="de.jworks.fpp.print.ui.perspective">
-      </perspective>
-   </extension>
-   <extension
-         point="org.eclipse.ui.views">
-      <view
-            name="View"
-            class="de.jworks.fpp.print.ui.View"
-            id="de.jworks.fpp.print.ui.view">
-      </view>
-   </extension>
-   <extension
-         point="org.eclipse.ui.perspectiveExtensions">
-      <perspectiveExtension
-            targetID="*">
-         <view
-               standalone="true"
-               minimized="false"
-               relative="org.eclipse.ui.editorss"
-               relationship="left"
-               id="de.jworks.fpp.print.ui.view">
-         </view>
-      </perspectiveExtension>
+         point="org.eclipse.core.runtime.adapters">
+      <factory
+            adaptableType="de.jworks.fpp.print.ui.Factory1"
+            class="de.jworks.fpp.print.ui.PrintAdapterFactory">
+         <adapter
+               type="de.jworks.fpp.print.ui.Adapter1">
+         </adapter>
+      </factory>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
       <menuContribution
             locationURI="menu:org.eclipse.ui.main.menu">
          <menu
+               id="file"
                label="File">
             <command
-                  commandId="org.eclipse.ui.file.exit"
-                  label="Exit">
+                  commandId="org.eclipse.ui.file.exit">
             </command>
          </menu>
       </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            class="de.jworks.fpp.print.ui.PrintPerspective"
+            icon="icons/alt_window_16.gif"
+            id="de.jworks.fpp.print"
+            name="Print">
+      </perspective>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="*">
+      </perspectiveExtension>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            class="de.jworks.fpp.print.ui.ExplorerView"
+            icon="icons/alt_window_16.gif"
+            id="de.jworks.fpp.print.explorer"
+            name="Explorer">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="de.jworks.fpp.print.ui.LayoutEditor"
+            icon="icons/alt_window_16.gif"
+            id="de.jworks.fpp.print.layout"
+            name="Layout Editor">
+      </editor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.navigator.viewer">
+      <viewer
+            viewerId="de.jworks.fpp.print.explorer">
+      </viewer>
+      <viewerContentBinding
+            viewerId="de.jworks.fpp.print.explorer">
+      </viewerContentBinding>
+   </extension>
+   <extension
+         point="org.eclipse.ui.navigator.navigatorContent">
+      <navigatorContent
+            contentProvider="org.eclipse.ui.model.BaseWorkbenchContentProvider"
+            id="de.jworks.fpp.print.documents"
+            name="Documents">
+         <triggerPoints></triggerPoints>
+      </navigatorContent>
    </extension>
 
 </plugin>

@@ -27,13 +27,9 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.ScrollBar;
-import org.eclipse.ui.part.ViewPart;
 
-public class View extends ViewPart {
+public class LayoutViewer extends Composite {
 
-	public static final String ID = "de.jworks.fpp.print.ui.view";
-	
-	private Composite composite;
 	private ScrollBar horizontalBar;
 	private ScrollBar verticalBar;
 
@@ -44,13 +40,11 @@ public class View extends ViewPart {
 	private ImageData imageData;
 
 	private float sW;
-
 	private float sA;
-
 	private float sD;
-
-	@Override
-	public void createPartControl(Composite parent) {
+	
+	public LayoutViewer(Composite parent, int style) {
+		super(parent, style | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 
 		try {
 			PDDocument document = new PDDocument();
@@ -89,49 +83,44 @@ public class View extends ViewPart {
 			throw new RuntimeException(e);
 		}
 
-		composite = new Composite(parent, SWT.H_SCROLL | SWT.V_SCROLL | SWT.DOUBLE_BUFFERED);
-		composite.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_DARK_GRAY));
-		composite.addPaintListener(new PaintListener() {
+		setBackground(Display.getDefault().getSystemColor(SWT.COLOR_DARK_GRAY));
+		addPaintListener(new PaintListener() {
 			@Override
 			public void paintControl(PaintEvent e) {
 				paint(e.gc);
 			}
 		});
-		composite.addControlListener(new ControlAdapter() {
+		addControlListener(new ControlAdapter() {
 			@Override
 			public void controlResized(ControlEvent e) {
 				updateScrollBars();
 			}
 		});
 
-		horizontalBar = composite.getHorizontalBar();
+		horizontalBar = getHorizontalBar();
 		horizontalBar.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				composite.redraw();
+				redraw();
 			}
 		});
 
-		verticalBar = composite.getVerticalBar();
+		verticalBar = getVerticalBar();
 		verticalBar.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				composite.redraw();
+				redraw();
 			}
 		});
 
 		updateScrollBars();
 	}
 
-	@Override
-	public void setFocus() {
-	}
-
 	public void updateScrollBars() {
 		int width = 20 + imageData.width + 20;
 		int height = 20 + imageData.height + 20;
 
-		Rectangle clientArea = composite.getClientArea();
+		Rectangle clientArea = getClientArea();
 
 		horizontalBar.setMaximum(width);
 		horizontalBar.setThumb(Math.min(clientArea.width, width));
@@ -139,7 +128,7 @@ public class View extends ViewPart {
 		verticalBar.setMaximum(height);
 		verticalBar.setThumb(Math.min(clientArea.height, height));
 
-		composite.redraw();
+		redraw();
 	}
 
 	private void paint(GC gc) {
@@ -251,6 +240,11 @@ public class View extends ViewPart {
 			return data;
 		}
 		return null;
+	}
+
+	@Override
+	protected void checkSubclass() {
+		// Disable the check that prevents subclassing of SWT components
 	}
 
 }
