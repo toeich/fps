@@ -65,7 +65,7 @@ public class InDesignService {
 		{
 			SmbFile inddFile = new SmbFile(share, "test.indd");
 
-			InputStream inputStream = InDesignService.class.getResourceAsStream("/test4.indd");
+			InputStream inputStream = InDesignService.class.getResourceAsStream("/test5.indd");
 			OutputStream outputStream = inddFile.getOutputStream();
 			IOUtils.copy(inputStream, outputStream);
 			outputStream.close();
@@ -82,6 +82,44 @@ public class InDesignService {
 			Map<String, Object> input = new HashMap<String, Object>();
 			input.put("inddFile", localShare + "test.indd");
 			input.put("idmlFile", localShare + "test.idml");
+			StringWriter stringWriter = new StringWriter();
+			template.process(input, stringWriter);
+
+			script = stringWriter.toString();
+		}
+
+		// execute script
+		{
+			ServicePortType servicePortType = new Service().getService();
+
+			BindingProvider bindingProvider = (BindingProvider) servicePortType;
+			Map<String, Object> requestContext = bindingProvider.getRequestContext();
+			requestContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, remoteUrl);
+
+			ObjectFactory objectFactory = new ObjectFactory();
+
+			RunScriptParameters runScriptParameters = objectFactory.createRunScriptParameters();
+			runScriptParameters.setScriptLanguage(objectFactory.createRunScriptParametersScriptLanguage("javascript"));
+			runScriptParameters.setScriptText(objectFactory.createRunScriptParametersScriptText(script));
+			Holder<Integer> errorNumber = new Holder<Integer>();
+			Holder<String> errorString = new Holder<String>();
+			Holder<Data> scriptResult = new Holder<Data>();
+			servicePortType.runScript(runScriptParameters, errorNumber, errorString, scriptResult);
+
+			if (errorNumber.value != 0) {
+				System.out.println("ERROR: " + errorString.value);
+			}
+		}
+
+		// create script
+		{
+			Configuration configuration = new Configuration();
+			configuration.setClassForTemplateLoading(InDesignService.class, "/templates/");
+
+			Template template = configuration.getTemplate("exportAsJPG.ftl");
+			Map<String, Object> input = new HashMap<String, Object>();
+			input.put("inddFile", localShare + "test.indd");
+			input.put("jpgFile", localShare + "test.jpg");
 			StringWriter stringWriter = new StringWriter();
 			template.process(input, stringWriter);
 

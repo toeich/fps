@@ -140,17 +140,19 @@ public class LayoutContext {
 					int wordStart = lineBreakIterator.previous();
 					int wordEnd = lineBreakIterator.next();
 					String word = run.content.substring(wordStart, wordEnd);
-					Hyphenation hyphenation = Hyphenator.hyphenate(run.language, null, null, null, word, 2, 2);
-					if (hyphenation != null) {
-						int[] hyphenationPoints = hyphenation.getHyphenationPoints();
-						ArrayUtils.reverse(hyphenationPoints);
-						for (int hyphenationPoint : hyphenationPoints) {
-							stringWidth = font.getStringWidth(run.content.substring(0, wordStart + hyphenationPoint) + "-") * characterStyle.getFontSize();
-							if (stringWidth <= width) {
-								return new Run[] { 
-										new Run(run, run.content.substring(0, wordStart + hyphenationPoint) + "-"),
-										new Run(run, run.content.substring(wordStart + hyphenationPoint))
-								};
+					if (word.length() >= 6) {
+						Hyphenation hyphenation = Hyphenator.hyphenate(run.language, null, null, null, word, 2, 3);
+						if (hyphenation != null) {
+							int[] hyphenationPoints = hyphenation.getHyphenationPoints();
+							ArrayUtils.reverse(hyphenationPoints);
+							for (int hyphenationPoint : hyphenationPoints) {
+								stringWidth = font.getStringWidth(run.content.substring(0, wordStart + hyphenationPoint) + "-") * characterStyle.getFontSize();
+								if (stringWidth <= width) {
+									return new Run[] { 
+											new Run(run, run.content.substring(0, wordStart + hyphenationPoint) + "-"),
+											new Run(run, run.content.substring(wordStart + hyphenationPoint))
+									};
+								}
 							}
 						}
 					}
