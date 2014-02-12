@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -33,8 +32,6 @@ import de.jworks.fpp.labs.indesign.soap.ObjectFactory;
 import de.jworks.fpp.labs.indesign.soap.RunScriptParameters;
 import de.jworks.fpp.labs.indesign.soap.Service;
 import de.jworks.fpp.labs.indesign.soap.ServicePortType;
-import freemarker.template.Configuration;
-import freemarker.template.Template;
 
 public class InDesignService {
 	
@@ -46,6 +43,8 @@ public class InDesignService {
 	private static final String localShare = "E:/InDesign_CS6/";
 	
 	public static void main(String[] args) throws Exception {
+		TemplateProcessor templateProcessor = new TemplateProcessor();
+		
 		SmbFile share = new SmbFile(remoteShare, new NtlmPasswordAuthentication(remoteDomain, remoteUsername, remotePassword));
 
 		// clean up remote files
@@ -75,17 +74,11 @@ public class InDesignService {
 		// create script
 		String script;
 		{
-			Configuration configuration = new Configuration();
-			configuration.setClassForTemplateLoading(InDesignService.class, "/templates/");
-
-			Template template = configuration.getTemplate("exportAsIDML.ftl");
 			Map<String, Object> input = new HashMap<String, Object>();
 			input.put("inddFile", localShare + "test.indd");
 			input.put("idmlFile", localShare + "test.idml");
-			StringWriter stringWriter = new StringWriter();
-			template.process(input, stringWriter);
 
-			script = stringWriter.toString();
+			script = templateProcessor.process("exportAsIDML.ftl", input);
 		}
 
 		// execute script
@@ -113,17 +106,11 @@ public class InDesignService {
 
 		// create script
 		{
-			Configuration configuration = new Configuration();
-			configuration.setClassForTemplateLoading(InDesignService.class, "/templates/");
-
-			Template template = configuration.getTemplate("exportAsJPG.ftl");
 			Map<String, Object> input = new HashMap<String, Object>();
 			input.put("inddFile", localShare + "test.indd");
 			input.put("jpgFile", localShare + "test.jpg");
-			StringWriter stringWriter = new StringWriter();
-			template.process(input, stringWriter);
 
-			script = stringWriter.toString();
+			script = templateProcessor.process("exportAsJPG.ftl", input);
 		}
 
 		// execute script
