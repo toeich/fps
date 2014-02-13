@@ -69,7 +69,33 @@ public class LayoutContext {
 		}
 	}
 	
-	// ===== TEXT =====
+	// ===== TEXT BOX =====
+	
+	public TextBox[] layout(TextBox textBox, Double left, Double top, Double right, Double bottom) {
+		Double _left = left;
+		if (_left != null && textBox.frameColor != null) {
+			_left += textBox.frameWidth;
+		}
+		Double _top = top;
+		if (_top != null && textBox.frameColor != null) {
+			_top -= textBox.frameWidth;
+		}
+		Double _right = right;
+		if (_right != null && textBox.frameColor != null) {
+			_right -= textBox.frameWidth;
+		}
+		Double _bottom = bottom;
+		if (_bottom != null && textBox.frameColor != null) {
+			_bottom += textBox.frameWidth;
+		}
+		TextBox newTextBox = new TextBox();
+		TextBox rest = null;
+		Story[] layoutResult = layout(textBox.story, _left, _top, _right, _bottom);
+		
+		return new TextBox[] { null, textBox };
+	}
+	
+	// ===== STORY =====
 	
 	public Story[] layout(Story story, Double left, Double top, Double right, Double bottom) {
 		numHyphens = 0;
