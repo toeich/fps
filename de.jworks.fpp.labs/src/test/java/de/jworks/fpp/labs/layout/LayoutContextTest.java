@@ -32,7 +32,7 @@ public class LayoutContextTest {
 	@Test
 	public void testLayoutStory() throws Exception {
 		Story story = unmarshal("/story.xml", Story.class);
-		Story[] layoutResult = cut.layout(story, (long) 0, (long) 0, (long) (50.0 * MM * 1000), (long) (50.0 * MM * 1000));
+		Story[] layoutResult = cut.layout(story, 0.0, 0.0, 50.0 * MM, 50.0 * MM);
 		String expected = laadString("/story.txt");
 		String actual = layoutResult[0].toString();
 		System.out.println(actual);

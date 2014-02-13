@@ -11,13 +11,15 @@ import javax.xml.bind.annotation.XmlValue;
 public class Run {
 
 	@XmlAttribute(name = "character-style")
-	public String characterStyleName;
+	private String characterStyleName;
 
 	@XmlAttribute
-	public String language;
+	private String language;
 
 	@XmlValue
-	public String content;
+	private String content;
+
+	private Double x;
 
 	public Run() {
 	}
@@ -32,9 +34,41 @@ public class Run {
 		this.content = newContent;
 	}
 
+	public String getCharacterStyleName() {
+		return characterStyleName;
+	}
+
+	public void setCharacterStyleName(String characterStyleName) {
+		this.characterStyleName = characterStyleName;
+	}
+
+	public String getLanguage() {
+		return language;
+	}
+
+	public void setLanguage(String language) {
+		this.language = language;
+	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	public Double getX() {
+		return x;
+	}
+
+	public void setX(Double x) {
+		this.x = x;
+	}
+
 	@Override
 	public String toString() {
-		return content;
+		return getContent();
 	}
 
 }

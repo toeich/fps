@@ -1,7 +1,5 @@
 package de.jworks.fpp.print.ui;
 
-import java.util.Arrays;
-
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.model.BaseWorkbenchContentProvider;
 import org.eclipse.ui.model.WorkbenchAdapter;

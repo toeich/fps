@@ -8,6 +8,7 @@
 	</character-styles>
 	
 	<paragraph-styles>
+		<paragraph-style name="Default" character-style="Default" />
 	</paragraph-styles>
 	
 </stylesheet>

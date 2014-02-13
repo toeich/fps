@@ -14,6 +14,8 @@ public class Line {
 
 	@XmlElement(name = "run")
 	public final List<Run> runs = new ArrayList<Run>();
+	
+	public Double y;
 
 	public Line() {
 	}

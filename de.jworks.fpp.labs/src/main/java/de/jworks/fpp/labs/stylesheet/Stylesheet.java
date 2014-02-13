@@ -13,7 +13,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
 public class Stylesheet {
-
+	
 	@XmlAttribute
 	private String name;
 	
@@ -45,10 +45,23 @@ public class Stylesheet {
 		return characterStyles;
 	}
 	
-	public CharacterStyle getCharacterStyle(String name) {
+	public CharacterStyle getCharacterStyle(String characterStyleName) {
 		for (CharacterStyle characterStyle : characterStyles) {
-			if (characterStyle.getName().equals(name)) {
+			if (characterStyle.getName().equals(characterStyleName)) {
 				return characterStyle;
+			}
+		}
+		return null;
+	}
+
+	public List<ParagraphStyle> getParagraphStyles() {
+		return paragraphStyles;
+	}
+	
+	public ParagraphStyle getParagraphStyle(String paragraphStyleName) {
+		for (ParagraphStyle paragraphStyle : paragraphStyles) {
+			if (paragraphStyle.getName().equals(paragraphStyleName)) {
+				return paragraphStyle;
 			}
 		}
 		return null;
